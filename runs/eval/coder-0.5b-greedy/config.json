@@ -1,0 +1,16 @@
+{
+  "model": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+  "out": "runs/eval/coder-0.5b-greedy",
+  "datasets": [
+    "mbpp_validation",
+    "mbpp_test",
+    "mbppplus",
+    "humanevalplus"
+  ],
+  "n": 1,
+  "temperature": 0.0,
+  "max_tokens": 1024,
+  "seed": 0,
+  "vllm": "0.31.0",
+  "example_prompt": "<|im_start|>system\nYou are Qwen, created by Alibaba Cloud. You are a helpful assistant.<|im_end|>\n<|im_start|>user\nPlease provide a self-contained Python script that solves the following problem in a markdown code block:\n```\n\"\"\"\nWrite a python function to find minimum sum of factors of a given number.\nassert find_Min_Sum(12) == 7\n\"\"\"\n```\n<|im_end|>\n<|im_start|>assistant\nBelow is a Python script with a self-contained function that solves the problem and passes corresponding tests:\n```python\n"
+}

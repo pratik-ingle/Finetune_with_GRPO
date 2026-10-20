@@ -1,0 +1,83 @@
+{
+  "humanevalplus": {
+    "problems": 164,
+    "samples_per_problem": 1,
+    "base_pass@1": 0.5975609756097561,
+    "base_pass@1_se": 0.03841026959095087,
+    "all_pass@1": 0.5609756097560976,
+    "all_pass@1_se": 0.03887071342353302,
+    "truncated": 0.03048780487804878,
+    "categories": {
+      "pass": 0.5609756097560976,
+      "assert_failure": 0.34146341463414637,
+      "runtime_error": 0.08536585365853659,
+      "syntax_error": 0.012195121951219513
+    }
+  },
+  "mbpp_test": {
+    "problems": 500,
+    "samples_per_problem": 1,
+    "base_pass@1": 0.334,
+    "base_pass@1_se": 0.02111349234774381,
+    "all_pass@1": 0.328,
+    "all_pass@1_se": 0.021017027165175464,
+    "truncated": 0.024,
+    "categories": {
+      "assert_failure": 0.544,
+      "pass": 0.328,
+      "runtime_error": 0.102,
+      "syntax_error": 0.012,
+      "wrong_name": 0.008,
+      "timeout": 0.006
+    }
+  },
+  "mbpp_validation": {
+    "problems": 90,
+    "samples_per_problem": 1,
+    "base_pass@1": 0.37777777777777777,
+    "base_pass@1_se": 0.051392052067171345,
+    "all_pass@1": 0.37777777777777777,
+    "all_pass@1_se": 0.051392052067171345,
+    "truncated": 0.011111111111111112,
+    "categories": {
+      "assert_failure": 0.5444444444444444,
+      "pass": 0.37777777777777777,
+      "runtime_error": 0.06666666666666667,
+      "timeout": 0.011111111111111112
+    }
+  },
+  "mbppplus": {
+    "problems": 378,
+    "samples_per_problem": 1,
+    "base_pass@1": 0.5158730158730159,
+    "base_pass@1_se": 0.025738330639412107,
+    "all_pass@1": 0.4365079365079365,
+    "all_pass@1_se": 0.02554284681740052,
+    "truncated": 0.031746031746031744,
+    "categories": {
+      "pass": 0.4365079365079365,
+      "assert_failure": 0.42328042328042326,
+      "runtime_error": 0.1111111111111111,
+      "wrong_name": 0.010582010582010581,
+      "timeout": 0.010582010582010581,
+      "syntax_error": 0.007936507936507936
+    }
+  },
+  "mbppplus_dedup": {
+    "problems": 270,
+    "samples_per_problem": 1,
+    "base_pass@1": 0.5370370370370371,
+    "base_pass@1_se": 0.03040178640610153,
+    "all_pass@1": 0.45925925925925926,
+    "all_pass@1_se": 0.0303841692323508,
+    "truncated": 0.02962962962962963,
+    "categories": {
+      "pass": 0.45925925925925926,
+      "assert_failure": 0.40370370370370373,
+      "runtime_error": 0.11481481481481481,
+      "wrong_name": 0.011111111111111112,
+      "timeout": 0.007407407407407408,
+      "syntax_error": 0.003703703703703704
+    }
+  }
+}

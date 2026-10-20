@@ -1,0 +1,105 @@
+{
+  "humanevalplus": {
+    "problems": 164,
+    "samples_per_problem": 10,
+    "base_pass@1": 0.49268292682926834,
+    "base_pass@1_se": 0.029631395237605426,
+    "base_pass@5": 0.7360627177700348,
+    "base_pass@10": 0.823170731707317,
+    "all_pass@1": 0.4573170731707317,
+    "all_pass@1_se": 0.029256600238176184,
+    "all_pass@5": 0.7066395663956639,
+    "all_pass@10": 0.7865853658536586,
+    "truncated": 0.004878048780487805,
+    "categories": {
+      "pass": 0.4573170731707317,
+      "assert_failure": 0.425,
+      "runtime_error": 0.1,
+      "syntax_error": 0.00975609756097561,
+      "timeout": 0.007926829268292683
+    }
+  },
+  "mbpp_test": {
+    "problems": 500,
+    "samples_per_problem": 10,
+    "base_pass@1": 0.319,
+    "base_pass@1_se": 0.016344181366133272,
+    "base_pass@5": 0.517626984126984,
+    "base_pass@10": 0.578,
+    "all_pass@1": 0.3168,
+    "all_pass@1_se": 0.01634042652681246,
+    "all_pass@5": 0.5150317460317461,
+    "all_pass@10": 0.576,
+    "truncated": 0.004,
+    "categories": {
+      "assert_failure": 0.534,
+      "pass": 0.3168,
+      "runtime_error": 0.1234,
+      "wrong_name": 0.0112,
+      "syntax_error": 0.0094,
+      "timeout": 0.0052
+    }
+  },
+  "mbpp_validation": {
+    "problems": 90,
+    "samples_per_problem": 10,
+    "base_pass@1": 0.3388888888888889,
+    "base_pass@1_se": 0.04018355029074273,
+    "base_pass@5": 0.5240299823633157,
+    "base_pass@10": 0.5777777777777777,
+    "all_pass@1": 0.3388888888888889,
+    "all_pass@1_se": 0.04018355029074273,
+    "all_pass@5": 0.5240299823633157,
+    "all_pass@10": 0.5777777777777777,
+    "truncated": 0.0022222222222222222,
+    "categories": {
+      "assert_failure": 0.51,
+      "pass": 0.3388888888888889,
+      "runtime_error": 0.14444444444444443,
+      "syntax_error": 0.005555555555555556,
+      "wrong_name": 0.0011111111111111111
+    }
+  },
+  "mbppplus": {
+    "problems": 378,
+    "samples_per_problem": 10,
+    "base_pass@1": 0.47301587301587306,
+    "base_pass@1_se": 0.020289534405961384,
+    "base_pass@5": 0.6837574535987234,
+    "base_pass@10": 0.7407407407407407,
+    "all_pass@1": 0.3984126984126985,
+    "all_pass@1_se": 0.020302376405735106,
+    "all_pass@5": 0.5835537918871252,
+    "all_pass@10": 0.6375661375661376,
+    "truncated": 0.0026455026455026454,
+    "categories": {
+      "assert_failure": 0.4486772486772487,
+      "pass": 0.3984126984126984,
+      "runtime_error": 0.12195767195767196,
+      "wrong_name": 0.013756613756613757,
+      "syntax_error": 0.010846560846560847,
+      "timeout": 0.006349206349206349
+    }
+  },
+  "mbppplus_dedup": {
+    "problems": 270,
+    "samples_per_problem": 10,
+    "base_pass@1": 0.49370370370370376,
+    "base_pass@1_se": 0.024252360933031944,
+    "base_pass@5": 0.6971634332745444,
+    "base_pass@10": 0.7444444444444445,
+    "all_pass@1": 0.4211111111111111,
+    "all_pass@1_se": 0.024486933146090323,
+    "all_pass@5": 0.5975749559082892,
+    "all_pass@10": 0.6407407407407407,
+    "truncated": 0.0014814814814814814,
+    "categories": {
+      "assert_failure": 0.4274074074074074,
+      "pass": 0.4211111111111111,
+      "runtime_error": 0.11962962962962963,
+      "wrong_name": 0.015555555555555555,
+      "syntax_error": 0.00962962962962963,
+      "timeout": 0.006666666666666667
+    }
+  }
+}

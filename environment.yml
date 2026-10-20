@@ -1,0 +1,39 @@
+# Phase 1 environment for GRPO on MBPP.
+#   conda env create -f environment.yml
+#   conda activate grpo
+#   python scripts/smoke_vllm.py
+#
+# CUDA: the default PyPI torch 2.13 / vLLM 0.31 wheels are built for CUDA 13 and need
+# driver >= 580. The +cu129 builds below also run on 580+, and on driver 535 they rely on
+# CUDA minor-version compatibility (no PTX JIT). If the smoke test fails with PTX or
+# "unsupported toolchain" errors, upgrade the driver instead of pinning older versions.
+#
+# vLLM is pinned to the newest release TRL supports (trl 1.16 requires vllm <= 0.31.0),
+# and torch/torchvision/torchaudio are pinned to what that vLLM release requires.
+name: grpo
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu129
+      - torch==2.13.0+cu129
+      - torchvision==0.28.0+cu129
+      - torchaudio==2.11.0+cu129
+      # PyPI's torchcodec 0.17 links CUDA 13 (libnvrtc.so.13), and vLLM crashes on import without it
+      - torchcodec==0.16.0+cu129
+      - vllm @ https://github.com/vllm-project/vllm/releases/download/v0.31.0/vllm-0.31.0%2Bcu129-cp38-abi3-manylinux_2_28_x86_64.whl
+      - trl[vllm,peft]==1.16.0
+      - transformers
+      - peft
+      - datasets
+      - accelerate
+      - evalplus
+      - wandb
+      - pytest
+variables:
+  # FlashInfer's top-k/top-p sampler JIT-compiles with nvcc, which a pip-only install lacks,
+  # and vLLM crashes at startup instead of falling back. Use vLLM's PyTorch sampler instead.
+  VLLM_USE_FLASHINFER_SAMPLER: "0"
