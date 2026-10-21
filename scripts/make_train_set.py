@@ -3,10 +3,11 @@
     python -m scripts.make_train_set --model Qwen/Qwen2.5-Coder-0.5B-Instruct --out data/train-coder-0.5b.jsonl
 
 Samples 8 completions per MBPP train problem with the training settings (temperature 1.0, 512 tokens),
-scores them with the training reward, and drops problems where all 8 rewards are equal: each completion's
-advantage is (r - mean) / std within its group, so such a problem contributes nothing (see Phase 0).
-With partial credit that is slightly looser than "all 8 or none pass": a group where nothing fully passes
-still gives a gradient if its partial scores differ.
+scores them with the training reward, and keeps problems where some but not all samples pass every test.
+Each completion's advantage is (r - mean) / std within its group, so a problem where every sample gets
+the same reward contributes nothing (see Phase 0). With partial credit, a group where nothing fully
+passes can still differ, mostly by passing only the visible assert; we drop those too, so that a binary
+reward gets a gradient on every kept problem as well, and to avoid rewarding a visible-test-only solution.
 
 Each output row has task_id, text, tests, test_setup_code and entry_point (see src.data), plus the
 filtering samples' rewards. The raw samples go next to it as <out>.samples.jsonl.
@@ -50,15 +51,15 @@ def main():
         groups.setdefault(s["task_id"], []).append(r)
 
     kept = [{**{k: by_task[t][k] for k in FIELDS}, "filter_rewards": rs}
-            for t, rs in groups.items() if len(set(rs)) > 1]
+            for t, rs in groups.items() if 0 < sum(r == 1.0 for r in rs) < args.n]
     with args.out.open("w") as f:
         f.writelines(json.dumps(row) + "\n" for row in kept)
 
     passes = Counter(sum(r == 1.0 for r in rs) for rs in groups.values())
+    partial_only = sum(1 for rs in groups.values() if max(rs) < 1.0 and len(set(rs)) > 1)
     print(f"kept {len(kept)}/{len(groups)} problems -> {args.out}")
-    print(f"  dropped: {passes[args.n]} where all {args.n} pass, {sum(len(set(rs)) == 1 and rs[0] < 1 for rs in groups.values())}"
-          f" where every reward is the same below 1.0 (mostly 0)")
-    print(f"  learn.md's binary rule (drop all-pass or none-pass) would keep {len(groups) - passes[args.n] - passes[0]}")
+    print(f"  dropped {passes[args.n]} where all {args.n} pass and {passes[0]} where none passes "
+          f"({partial_only} of those had differing partial credit)")
     print("  problems by number of fully passing samples: " + ", ".join(f"{k}: {passes[k]}" for k in range(args.n + 1)))
 
 

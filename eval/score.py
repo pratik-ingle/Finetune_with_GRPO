@@ -130,10 +130,10 @@ def print_summaries(run_dir: Path, summaries: dict, ks: list[int]) -> None:
         print(f"  {name:<24}" + ", ".join(f"{c} {100 * v:.1f}%" for c, v in s["categories"].items()))
 
 
-def compare(dir_a: Path, dir_b: Path) -> None:
-    """Paired comparison per problem: bootstrap CI of the difference, plus McNemar's test for greedy runs."""
-    print(f"A = {dir_a}\nB = {dir_b}\n")
-    print(f"{'dataset':<26}{'tests':<6}{'problems':>8}{'A':>8}{'B':>8}{'B - A':>8}{'95% CI':>18}{'McNemar p':>11}")
+def paired_rows(dir_a: Path, dir_b: Path) -> list[dict]:
+    """Paired comparison per problem for every dataset both runs scored: pass rates, B - A with a
+    bootstrap 95% CI, and McNemar's p when both runs are greedy (None otherwise)."""
+    rows = []
     for path_a in sorted(dir_a.glob("*.results.jsonl")):
         path_b = dir_b / path_a.name
         if not path_b.exists():
@@ -146,12 +146,26 @@ def compare(dir_a: Path, dir_b: Path) -> None:
                 tasks = sorted(counts_a.keys() & counts_b.keys())
                 a = np.array([counts_a[t][1] / counts_a[t][0] for t in tasks])
                 b = np.array([counts_b[t][1] / counts_b[t][0] for t in tasks])
-                lo, hi = paired_bootstrap(a, b)
                 greedy = all(counts_a[t][0] == counts_b[t][0] == 1 for t in tasks)
-                p = f"{mcnemar_p(a == 1, b == 1):.3f}" if greedy else "-"
-                ci = f"[{100 * lo:+.1f}, {100 * hi:+.1f}]"
-                print(f"{view:<26}{m:<6}{len(tasks):>8}{100 * a.mean():>8.1f}{100 * b.mean():>8.1f}"
-                      f"{100 * (b.mean() - a.mean()):>+8.1f}{ci:>18}{p:>11}")
+                rows.append({"dataset": view, "tests": m, "problems": len(tasks), "a": float(a.mean()),
+                             "b": float(b.mean()), "diff": float(b.mean() - a.mean()), "ci": paired_bootstrap(a, b),
+                             "mcnemar_p": mcnemar_p(a == 1, b == 1) if greedy else None})
+    return rows
+
+
+def print_paired(rows: list[dict]) -> None:
+    print(f"{'dataset':<26}{'tests':<6}{'problems':>8}{'A':>8}{'B':>8}{'B - A':>8}{'95% CI':>18}{'McNemar p':>11}")
+    for r in rows:
+        ci = f"[{100 * r['ci'][0]:+.1f}, {100 * r['ci'][1]:+.1f}]"
+        p = "-" if r["mcnemar_p"] is None else f"{r['mcnemar_p']:.3f}"
+        print(f"{r['dataset']:<26}{r['tests']:<6}{r['problems']:>8}{100 * r['a']:>8.1f}{100 * r['b']:>8.1f}"
+              f"{100 * r['diff']:>+8.1f}{ci:>18}{p:>11}")
+
+
+def compare(dir_a: Path, dir_b: Path) -> None:
+    """Paired comparison per problem: bootstrap CI of the difference, plus McNemar's test for greedy runs."""
+    print(f"A = {dir_a}\nB = {dir_b}\n")
+    print_paired(paired_rows(dir_a, dir_b))
 
 
 def paired_bootstrap(a: np.ndarray, b: np.ndarray, iters: int = 10_000, seed: int = 0) -> tuple[float, float]:

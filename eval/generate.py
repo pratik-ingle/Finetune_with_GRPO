@@ -29,7 +29,9 @@ MAX_LORA_RANK = 64
 
 def make_llm(model: str, seed: int, lora: bool = False) -> LLM:
     lora_args = {"enable_lora": True, "max_lora_rank": MAX_LORA_RANK, "max_loras": 1} if lora else {}
-    return LLM(model, seed=seed, max_model_len=4096, gpu_memory_utilization=0.85, **lora_args)
+    # 0.85 ran out of memory with LoRA on large batches: vLLM's profiling misses the LoRA kernels' buffers.
+    # With batch-invariant kernels the cache size doesn't change any output, only the speed.
+    return LLM(model, seed=seed, max_model_len=4096, gpu_memory_utilization=0.7, **lora_args)
 
 
 def generate(llm: LLM, problems: list[dict], params: SamplingParams, lora: LoRARequest | None = None) -> list[dict]:

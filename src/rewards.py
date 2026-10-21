@@ -18,6 +18,11 @@ def unit_test_reward(completions, tests, test_setup_code=None, **kwargs):
     return list(_pool.map(lambda job: run_tests(*job) if job[0].strip() else 0.0, zip(codes, tests, setups)))
 
 
+def binary_unit_test_reward(completions, tests, test_setup_code=None, **kwargs):
+    """1.0 only if every test passes; the Phase 6 ablation against partial credit."""
+    return [float(r == 1.0) for r in unit_test_reward(completions, tests, test_setup_code)]
+
+
 def format_reward(completions, **kwargs):
     """1.0 if the code block is closed and its code parses, else 0.0; keep its weight small (~0.1)."""
     return [1.0 if "```" in c and _parses(completion_code(c)) else 0.0 for c in completions]
